@@ -3,9 +3,9 @@
 ![Icon](./icons/qdirstat.svg)
 
 Qt-based directory statistics: KDirStat without any KDE -- from the author of
-the original KDirStat [Stefan Hundhammer](Stefan.Hundhammer@gmx.de).
+the original KDirStat, Stefan Hundhammer.
 
-macOS builds notarized by [Jesus Herrera Arroyo](me@jesusarroyo.com)
+macOS binaries built and notarized by Jesus Herrera Arroyo.
 
 This repo only provides macOS builds. For the original repo, please refer to: https://github.com/shundhammer/qdirstat
 
