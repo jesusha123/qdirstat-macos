@@ -24,3 +24,18 @@ file is shown as a large rectangle, and small files are shown as small
 rectangles. Click on it, and you will see where in the tree the file is, and
 you can instantly move it to the trash if you like. The color corresponds to
 the file type: Images, videos or whatever.
+
+## Install
+
+### Via dmg file
+
+- Download the latest QDirStat dmg file from the [releases page](https://github.com/jesusha123/qdirstat-macos/releases) 
+- Open the dmg file and drag QDirStat.app to the Applications folder
+
+### Via Homebrew
+
+Not yet available
+
+## Build
+
+Refer to [BUILD.md](./BUILD.md)
