@@ -34,7 +34,9 @@ the file type: Images, videos or whatever.
 
 ### Via Homebrew
 
-Not yet available
+```shell
+brew install qdirstat
+```
 
 ## Build
 
