@@ -1,5 +1,7 @@
 # QDirStat for macOS
 
+![Download count](https://img.shields.io/github/downloads/jesusha123/qdirstat-macos/total.svg)
+
 ![Icon](./icons/qdirstat.svg)
 
 Qt-based directory statistics: KDirStat without any KDE -- from the author of
