@@ -37,7 +37,7 @@ the file type: Images, videos or whatever.
 ### Via Homebrew
 
 ```shell
-brew install qdirstat
+brew install --cask qdirstat
 ```
 
 ## Build
