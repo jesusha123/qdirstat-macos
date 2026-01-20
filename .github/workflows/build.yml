@@ -30,6 +30,11 @@ jobs:
         pip install aqtinstall
         aqt install-qt mac desktop ${{ env.QT_VERSION }} clang_64 -m qt5compat --outputdir $GITHUB_WORKSPACE/Qt
 
+    - name: Patch Project File
+      run: |
+        # Set the application name to QDirStat (Title Case)
+        echo "macx:TARGET = QDirStat" >> src/src.pro
+
     - name: Configure Project
       run: |
         $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/qmake \
@@ -44,10 +49,10 @@ jobs:
 
     - name: Create App Bundle
       run: |
-        $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/macdeployqt src/qdirstat.app -dmg
+        $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/macdeployqt src/QDirStat.app -dmg
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: QDirStat.dmg
-        path: src/*.dmg
+        path: src/QDirStat.dmg
