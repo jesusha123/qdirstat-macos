@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<true/>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>QDirStat</string>
+	<key>CFBundleIconFile</key>
+	<string>qdirstat.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.qdirstat</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>13</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSSupportsAutomaticGraphicsSwitching</key>
+	<true/>
+    <key>NSDesktopFolderUsageDescription</key>
+    <string>QDirStat needs access to your Desktop to scan for disk usage.</string>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>QDirStat needs access to your Documents folder to scan for disk usage.</string>
+    <key>NSDownloadsFolderUsageDescription</key>
+    <string>QDirStat needs access to your Downloads folder to scan for disk usage.</string>
+    <key>NSFileProviderDomainUsageDescription</key>
+    <string>QDirStat needs access to file providers to scan for disk usage.</string>
+    <key>NSMoviesFolderUsageDescription</key>
+    <string>QDirStat needs access to your Movies folder to scan for disk usage.</string>
+    <key>NSMusicFolderUsageDescription</key>
+    <string>QDirStat needs access to your Music folder to scan for disk usage.</string>
+    <key>NSPicturesFolderUsageDescription</key>
+    <string>QDirStat needs access to your Pictures folder to scan for disk usage.</string>
+    <key>NSRemovableVolumesUsageDescription</key>
+    <string>QDirStat needs access to removable volumes to scan for disk usage.</string>
+    <key>NSNetworkVolumesUsageDescription</key>
+    <string>QDirStat needs access to network volumes to scan for disk usage.</string>
+</dict>
+</plist>

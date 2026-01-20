@@ -11,12 +11,18 @@ jobs:
       QDIRSTAT_TAG: '2.0'
 
     steps:
-    - name: Checkout QDirStat
+    - name: Checkout QDirStat Source
       uses: actions/checkout@v4
       with:
         repository: shundhammer/qdirstat
         ref: ${{ env.QDIRSTAT_TAG }}
+        path: qdirstat-source
         submodules: recursive
+
+    - name: Checkout Build Scripts (This Repo)
+      uses: actions/checkout@v4
+      with:
+        path: .
 
     - name: Setup MacPorts
       uses: melusina-org/setup-macports@v1
@@ -33,10 +39,14 @@ jobs:
     - name: Patch Project File
       run: |
         # Set the application name to QDirStat (Title Case)
-        echo "macx:TARGET = QDirStat" >> src/src.pro
+        echo "macx:TARGET = QDirStat" >> qdirstat-source/src/src.pro
+        # Inject custom Info.plist and Entitlements
+        echo "macx:QMAKE_INFO_PLIST = ../../macOS/Info.plist" >> qdirstat-source/src/src.pro
+        echo "macx:QMAKE_ENTITLEMENTS = ../../macOS/qdirstat.entitlements" >> qdirstat-source/src/src.pro
 
     - name: Configure Project
       run: |
+        cd qdirstat-source && \
         $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/qmake \
           -config release \
           "QMAKE_APPLE_DEVICE_ARCHS=x86_64 arm64" \
@@ -45,14 +55,14 @@ jobs:
 
     - name: Build Application
       run: |
-        make -j$(sysctl -n hw.ncpu)
+        cd qdirstat-source && make -j$(sysctl -n hw.ncpu)
 
     - name: Create App Bundle
       run: |
-        $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/macdeployqt src/QDirStat.app -dmg
+        $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/macdeployqt qdirstat-source/src/QDirStat.app -dmg
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: QDirStat.dmg
-        path: src/QDirStat.dmg
+        path: qdirstat-source/src/QDirStat.dmg
