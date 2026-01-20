@@ -42,6 +42,11 @@ jobs:
         p12-file-base64: ${{ secrets.MACOS_CERTIFICATE }}
         p12-password: ${{ secrets.MACOS_CERTIFICATE_PWD }}
 
+    - name: Debug - List Files
+      run: |
+        echo "Listing workspace contents:"
+        ls -R .
+
     - name: Patch Project File
       run: |
         # Set the application name to QDirStat (Title Case)
