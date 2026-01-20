@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>qdirstat.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.qdirstat</string>
+	<string>com.qdirstat.QDirStat</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
