@@ -19,7 +19,7 @@ jobs:
         submodules: recursive
 
     - name: Setup MacPorts
-      uses: macports-project/setup-macports@v1
+      uses: melusina-org/setup-macports@v1
 
     - name: Install Dependencies
       run: |
