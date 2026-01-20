@@ -11,6 +11,11 @@ jobs:
       QDIRSTAT_TAG: '2.0'
 
     steps:
+    - name: Checkout Build Scripts (This Repo)
+      uses: actions/checkout@v4
+      with:
+        path: .
+
     - name: Checkout QDirStat Source
       uses: actions/checkout@v4
       with:
@@ -18,11 +23,6 @@ jobs:
         ref: ${{ env.QDIRSTAT_TAG }}
         path: qdirstat-source
         submodules: recursive
-
-    - name: Checkout Build Scripts (This Repo)
-      uses: actions/checkout@v4
-      with:
-        path: .
 
     - name: Setup MacPorts
       uses: melusina-org/setup-macports@v1
