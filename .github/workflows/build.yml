@@ -1,0 +1,53 @@
+name: Build Universal macOS App
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      QT_VERSION: '6.10.1'
+      QDIRSTAT_TAG: '2.0'
+
+    steps:
+    - name: Checkout QDirStat
+      uses: actions/checkout@v4
+      with:
+        repository: shundhammer/qdirstat
+        ref: ${{ env.QDIRSTAT_TAG }}
+        submodules: recursive
+
+    - name: Setup MacPorts
+      uses: macports-project/setup-macports@v1
+
+    - name: Install Dependencies
+      run: |
+        sudo port install gettext +universal
+
+    - name: Install Qt
+      run: |
+        pip install aqtinstall
+        aqt install-qt mac desktop ${{ env.QT_VERSION }} clang_64 -m qt5compat --outputdir $GITHUB_WORKSPACE/Qt
+
+    - name: Configure Project
+      run: |
+        $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/qmake \
+          -config release \
+          "QMAKE_APPLE_DEVICE_ARCHS=x86_64 arm64" \
+          "INCLUDEPATH+=/opt/local/include" \
+          "LIBS+=-L/opt/local/lib -lintl"
+
+    - name: Build Application
+      run: |
+        make -j$(sysctl -n hw.ncpu)
+
+    - name: Create App Bundle
+      run: |
+        $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/macdeployqt src/qdirstat.app -dmg
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: QDirStat.dmg
+        path: src/*.dmg
