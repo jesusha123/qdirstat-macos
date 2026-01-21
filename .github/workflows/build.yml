@@ -2,6 +2,9 @@ name: Build Universal macOS App
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -11,15 +14,21 @@ jobs:
       QDIRSTAT_TAG: '2.0'
 
     steps:
-    - name: Checkout QDirStat
+    - name: Checkout Build Scripts (This Repo)
+      uses: actions/checkout@v4
+      with:
+        path: .
+
+    - name: Checkout QDirStat Source
       uses: actions/checkout@v4
       with:
         repository: shundhammer/qdirstat
         ref: ${{ env.QDIRSTAT_TAG }}
+        path: qdirstat-source
         submodules: recursive
 
     - name: Setup MacPorts
-      uses: macports-project/setup-macports@v1
+      uses: melusina-org/setup-macports@v1
 
     - name: Install Dependencies
       run: |
@@ -30,8 +39,23 @@ jobs:
         pip install aqtinstall
         aqt install-qt mac desktop ${{ env.QT_VERSION }} clang_64 -m qt5compat --outputdir $GITHUB_WORKSPACE/Qt
 
+    - name: Import Signing Certificate
+      uses: apple-actions/import-codesign-certs@v3
+      with:
+        p12-file-base64: ${{ secrets.MACOS_CERTIFICATE }}
+        p12-password: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+
+    - name: Patch Project File
+      run: |
+        # Set the application name to QDirStat (Title Case)
+        echo "macx:TARGET = QDirStat" >> qdirstat-source/src/src.pro
+        # Inject custom Info.plist and Entitlements
+        echo "macx:QMAKE_INFO_PLIST = ../../macOS/Info.plist" >> qdirstat-source/src/src.pro
+        echo "macx:QMAKE_ENTITLEMENTS = ../../macOS/qdirstat.entitlements" >> qdirstat-source/src/src.pro
+
     - name: Configure Project
       run: |
+        cd qdirstat-source && \
         $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/qmake \
           -config release \
           "QMAKE_APPLE_DEVICE_ARCHS=x86_64 arm64" \
@@ -40,14 +64,38 @@ jobs:
 
     - name: Build Application
       run: |
-        make -j$(sysctl -n hw.ncpu)
+        cd qdirstat-source && make -j$(sysctl -n hw.ncpu)
 
-    - name: Create App Bundle
+    - name: Create & Sign App Bundle
       run: |
-        $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/macdeployqt src/qdirstat.app -dmg
+        # Find the identity from the keychain
+        IDENTITY_HASH=$(security find-identity -v -p codesigning | grep "Developer ID Application" | head -1 | awk '{print $2}')
+
+        $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/macdeployqt \
+          qdirstat-source/src/QDirStat.app \
+          -dmg \
+          -sign-for-notarization="$IDENTITY_HASH"
+
+    - name: Notarize Disk Image
+      run: |
+        xcrun notarytool submit qdirstat-source/src/QDirStat.dmg \
+          --apple-id ${{ secrets.APPLE_ID }} \
+          --password ${{ secrets.APPLE_PASSWORD }} \
+          --team-id ${{ secrets.APPLE_TEAM_ID }} \
+          --wait
+
+    - name: Staple Ticket
+      run: |
+        xcrun stapler staple qdirstat-source/src/QDirStat.dmg
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: QDirStat.dmg
-        path: src/*.dmg
+        path: qdirstat-source/src/QDirStat.dmg
+
+    - name: Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: qdirstat-source/src/QDirStat.dmg
