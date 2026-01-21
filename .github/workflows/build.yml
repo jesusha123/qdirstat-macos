@@ -2,6 +2,9 @@ name: Build Universal macOS App
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -90,3 +93,9 @@ jobs:
       with:
         name: QDirStat.dmg
         path: qdirstat-source/src/QDirStat.dmg
+
+    - name: Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: qdirstat-source/src/QDirStat.dmg
