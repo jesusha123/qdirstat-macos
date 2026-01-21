@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: macos-latest
+    permissions:
+      contents: write
     env:
       QT_VERSION: '6.10.1'
       QDIRSTAT_TAG: '2.0'
@@ -66,27 +68,27 @@ jobs:
       run: |
         cd qdirstat-source && make -j$(sysctl -n hw.ncpu)
 
-    - name: Create & Sign App Bundle
-      run: |
-        # Find the identity from the keychain
-        IDENTITY_HASH=$(security find-identity -v -p codesigning | grep "Developer ID Application" | head -1 | awk '{print $2}')
+    # - name: Create & Sign App Bundle
+    #   run: |
+    #     # Find the identity from the keychain
+    #     IDENTITY_HASH=$(security find-identity -v -p codesigning | grep "Developer ID Application" | head -1 | awk '{print $2}')
 
-        $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/macdeployqt \
-          qdirstat-source/src/QDirStat.app \
-          -dmg \
-          -sign-for-notarization="$IDENTITY_HASH"
+    #     $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/macdeployqt \
+    #       qdirstat-source/src/QDirStat.app \
+    #       -dmg \
+    #       -sign-for-notarization="$IDENTITY_HASH"
 
-    - name: Notarize Disk Image
-      run: |
-        xcrun notarytool submit qdirstat-source/src/QDirStat.dmg \
-          --apple-id ${{ secrets.APPLE_ID }} \
-          --password ${{ secrets.APPLE_PASSWORD }} \
-          --team-id ${{ secrets.APPLE_TEAM_ID }} \
-          --wait
+    # - name: Notarize Disk Image
+    #   run: |
+    #     xcrun notarytool submit qdirstat-source/src/QDirStat.dmg \
+    #       --apple-id ${{ secrets.APPLE_ID }} \
+    #       --password ${{ secrets.APPLE_PASSWORD }} \
+    #       --team-id ${{ secrets.APPLE_TEAM_ID }} \
+    #       --wait
 
-    - name: Staple Ticket
-      run: |
-        xcrun stapler staple qdirstat-source/src/QDirStat.dmg
+    # - name: Staple Ticket
+    #   run: |
+    #     xcrun stapler staple qdirstat-source/src/QDirStat.dmg
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
