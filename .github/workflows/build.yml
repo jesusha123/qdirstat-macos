@@ -68,15 +68,11 @@ jobs:
       run: |
         cd qdirstat-source && make -j$(sysctl -n hw.ncpu)
 
-    # - name: Create & Sign App Bundle
-    #   run: |
-    #     # Find the identity from the keychain
-    #     IDENTITY_HASH=$(security find-identity -v -p codesigning | grep "Developer ID Application" | head -1 | awk '{print $2}')
-
-    #     $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/macdeployqt \
-    #       qdirstat-source/src/QDirStat.app \
-    #       -dmg \
-    #       -sign-for-notarization="$IDENTITY_HASH"
+    - name: Create App Bundle (Unsigned)
+      run: |
+        $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/macdeployqt \
+          qdirstat-source/src/QDirStat.app \
+          -dmg
 
     # - name: Notarize Disk Image
     #   run: |
