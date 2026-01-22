@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: macos-latest
+    permissions:
+      contents: write
     env:
       QT_VERSION: '6.10.1'
       QDIRSTAT_TAG: '2.0'
