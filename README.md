@@ -29,17 +29,26 @@ the file type: Images, videos or whatever.
 
 ## Install
 
-### Via dmg file
-
-- Download the latest QDirStat dmg file from the [releases page](https://github.com/jesusha123/qdirstat-macos/releases) 
-- Open the dmg file and drag QDirStat.app to the Applications folder
-
 ### Via Homebrew
 
 ```shell
 brew install --cask qdirstat
 ```
 
-## Build
+### Via dmg file
 
-Refer to [BUILD.md](./BUILD.md)
+- Download the latest QDirStat dmg file from the [releases page](https://github.com/jesusha123/qdirstat-macos/releases) 
+- Open the dmg file and drag QDirStat.app to the Applications folder
+
+## Permissions
+
+macOS requires explicit permission to access certain directories.
+
+- User Directories (e.g., Documents, Downloads): You will be asked to grant access only once.
+- System Directories: macOS may prompt you for permission every time you scan.
+
+To avoid repeated prompts and ensure QDirStat can scan your entire drive without interruption, we recommend checking Full Disk Access:
+
+1. Open **System Settings**.
+2. Navigate to **Privacy & Security** > **Full Disk Access**.
+3. Add **QDirStat** to the list and toggle the switch.
