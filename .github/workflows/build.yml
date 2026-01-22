@@ -73,14 +73,17 @@ jobs:
         # Find the identity from the keychain
         IDENTITY_HASH=$(security find-identity -v -p codesigning | grep "Developer ID Application" | head -1 | awk '{print $2}')
 
+        # Move App Bundle to root to avoid path in DMG volume name
+        mv qdirstat-source/src/QDirStat.app QDirStat.app
+
         $GITHUB_WORKSPACE/Qt/${{ env.QT_VERSION }}/macos/bin/macdeployqt \
-          qdirstat-source/src/QDirStat.app \
+          QDirStat.app \
           -dmg \
           -sign-for-notarization="$IDENTITY_HASH"
 
     - name: Notarize Disk Image
       run: |
-        xcrun notarytool submit qdirstat-source/src/QDirStat.dmg \
+        xcrun notarytool submit QDirStat.dmg \
           --apple-id ${{ secrets.APPLE_ID }} \
           --password ${{ secrets.APPLE_PASSWORD }} \
           --team-id ${{ secrets.APPLE_TEAM_ID }} \
@@ -88,16 +91,16 @@ jobs:
 
     - name: Staple Ticket
       run: |
-        xcrun stapler staple qdirstat-source/src/QDirStat.dmg
+        xcrun stapler staple QDirStat.dmg
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: QDirStat.dmg
-        path: qdirstat-source/src/QDirStat.dmg
+        path: QDirStat.dmg
 
     - name: Release
       if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v2
       with:
-        files: qdirstat-source/src/QDirStat.dmg
+        files: QDirStat.dmg
