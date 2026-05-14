@@ -12,8 +12,8 @@ jobs:
     permissions:
       contents: write
     env:
-      QT_VERSION: '6.10.1'
-      QDIRSTAT_TAG: '2.0'
+      QT_VERSION: '6.11.1'
+      QDIRSTAT_REF: 'cb014eb3fea3cfbf32f19138c1689f501462dc9c'
 
     steps:
     - name: Checkout Build Scripts (This Repo)
@@ -25,7 +25,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: shundhammer/qdirstat
-        ref: ${{ env.QDIRSTAT_TAG }}
+        ref: ${{ env.QDIRSTAT_REF }}
         path: qdirstat-source
         submodules: recursive
 
