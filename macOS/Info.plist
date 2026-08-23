@@ -12,10 +12,16 @@
 	<string>qdirstat.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.qdirstat.QDirStat</string>
+	<key>CFBundleName</key>
+	<string>QDirStat</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>2.0</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>13</string>
 	<key>NSPrincipalClass</key>

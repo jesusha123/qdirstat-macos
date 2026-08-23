@@ -55,6 +55,12 @@ jobs:
         echo "macx:QMAKE_INFO_PLIST = ../../macOS/Info.plist" >> qdirstat-source/src/src.pro
         echo "macx:QMAKE_ENTITLEMENTS = ../../macOS/qdirstat.entitlements" >> qdirstat-source/src/src.pro
 
+    - name: Stamp Bundle Version From Tag
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $GITHUB_REF_NAME" macOS/Info.plist
+        /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $GITHUB_REF_NAME" macOS/Info.plist
+
     - name: Configure Project
       run: |
         cd qdirstat-source && \
