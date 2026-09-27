@@ -13,7 +13,7 @@ jobs:
       contents: write
     env:
       QT_VERSION: '6.11.1'
-      QDIRSTAT_REF: 'cb014eb3fea3cfbf32f19138c1689f501462dc9c'
+      QDIRSTAT_REF: '6d09ff1b35edb1e41a893eabfe4ab5ace5534f71'
 
     steps:
     - name: Checkout Build Scripts (This Repo)
